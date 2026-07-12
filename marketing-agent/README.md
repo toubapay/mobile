@@ -49,6 +49,16 @@ npm start              # http://localhost:4100
 `ANTHROPIC_API_KEY` is required for the `/copy` and `/video-script`
 endpoints; nothing else needs credentials.
 
+### Manual testing UI
+
+`test.html` is a static, dependency-free test page (plain HTML/CSS/JS, no
+build step) for driving the API from a browser instead of curl. Open it
+directly (`file://.../marketing-agent/test.html`) or serve it with any
+static server, e.g. `python3 -m http.server 8080` from this folder. It talks
+to whatever API base URL you enter (defaults to `http://localhost:4100`) —
+the Express service already allows CORS from anywhere, so this works
+regardless of the page's own origin.
+
 ### Replacing the placeholder flyer backgrounds
 
 `assets/templates/ocass/background.png` and

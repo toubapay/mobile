@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Marketing Agent - Test</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f5f6f8;
+    --panel: #ffffff;
+    --border: #d9dce1;
+    --text: #1a1d21;
+    --muted: #6b7280;
+    --accent: #0b6e4f;
+    --accent-contrast: #ffffff;
+    --error-bg: #fdecec;
+    --error-text: #9b1c1c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a;
+      --panel: #1f2227;
+      --border: #33373d;
+      --text: #e7e9ec;
+      --muted: #9aa1ab;
+      --accent: #1fa774;
+      --accent-contrast: #06110d;
+      --error-bg: #3a1a1a;
+      --error-text: #ff8f8f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .subtitle { color: var(--muted); margin: 0 0 20px; font-size: 14px; }
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(300px, 380px) 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .panel + .panel { margin-top: 16px; }
+  label { display: block; font-size: 13px; margin: 12px 0 4px; font-weight: 600; }
+  label:first-child { margin-top: 0; }
+  input[type="text"], select, textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+  }
+  textarea { resize: vertical; min-height: 50px; font-family: inherit; }
+  .checkboxes { display: flex; flex-wrap: wrap; gap: 10px; }
+  .checkboxes label { display: flex; align-items: center; gap: 6px; font-weight: normal; margin: 0; }
+  .checkboxes input { width: auto; }
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+  button.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .row { display: flex; gap: 8px; }
+  .row > * { flex: 1; }
+  .status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .error {
+    background: var(--error-bg);
+    color: var(--error-text);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin-top: 12px;
+    white-space: pre-wrap;
+  }
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 12px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .platform-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+  .platform-card h4 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; color: var(--muted); }
+  .caption { font-size: 13px; margin: 4px 0; }
+  .hashtags { font-size: 12px; color: var(--muted); }
+  img.flyer { max-width: 100%; border-radius: 8px; border: 1px solid var(--border); margin-top: 10px; }
+  .empty { color: var(--muted); font-size: 13px; }
+  .field-note { font-size: 12px; color: var(--muted); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<h1>Marketing Agent - page de test</h1>
+<p class="subtitle">Client statique (aucune dependance, aucun build) pour tester l'API du marketing-agent en local.</p>
+
+<div class="panel" style="margin-bottom: 16px;">
+  <label for="apiBase">URL de l'API</label>
+  <input type="text" id="apiBase" value="http://localhost:4100" />
+  <p class="field-note">Enregistree dans le navigateur (localStorage). Le service doit tourner (<code>npm start</code>) et autorise CORS par defaut.</p>
+</div>
+
+<div class="grid">
+  <div>
+    <div class="panel">
+      <h3 style="margin-top:0;">Nouvelle campagne</h3>
+      <form id="briefForm">
+        <label for="app">Application</label>
+        <select id="app">
+          <option value="ocass">Ocass</option>
+          <option value="intercity">Intercity Travel</option>
+        </select>
+
+        <label for="goal">Objectif</label>
+        <textarea id="goal" required>Lancement du super app Ocass a Dakar</textarea>
+
+        <label for="keyMessage">Message cle</label>
+        <textarea id="keyMessage" required>Achetez, payez et envoyez de l'argent, tout dans une seule application</textarea>
+
+        <label for="offer">Offre (optionnel)</label>
+        <textarea id="offer">Livraison gratuite pour les 1000 premiers utilisateurs</textarea>
+
+        <label for="targetAudience">Audience cible</label>
+        <textarea id="targetAudience" required>Jeunes urbains a Dakar, 18-35 ans</textarea>
+
+        <label>Plateformes</label>
+        <div class="checkboxes">
+          <label><input type="checkbox" value="instagram" checked /> Instagram</label>
+          <label><input type="checkbox" value="facebook" checked /> Facebook</label>
+          <label><input type="checkbox" value="whatsapp" checked /> WhatsApp</label>
+          <label><input type="checkbox" value="tiktok" /> TikTok</label>
+        </div>
+
+        <label for="language">Langue</label>
+        <select id="language">
+          <option value="fr" selected>Francais</option>
+          <option value="en">English</option>
+        </select>
+
+        <div class="actions">
+          <button type="submit">Creer la campagne</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h3 style="margin-top:0;">Charger une campagne existante</h3>
+      <div class="row">
+        <input type="text" id="loadId" placeholder="id de campagne" />
+        <button class="secondary" id="loadBtn" type="button">Charger</button>
+      </div>
+      <div class="actions">
+        <button class="secondary" id="listBtn" type="button">Lister toutes les campagnes</button>
+      </div>
+      <div id="listResult"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel" id="campaignPanel">
+      <p class="empty">Aucune campagne selectionnee. Creez-en une ou chargez un id existant.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const apiBaseInput = document.getElementById('apiBase');
+apiBaseInput.value = localStorage.getItem('marketingAgentApiBase') || apiBaseInput.value;
+apiBaseInput.addEventListener('change', () => {
+  localStorage.setItem('marketingAgentApiBase', apiBaseInput.value.trim());
+});
+
+function apiBase() {
+  return apiBaseInput.value.trim().replace(/\/$/, '');
+}
+
+let currentCampaign = null;
+
+async function callApi(path, options = {}) {
+  const res = await fetch(apiBase() + path, {
+    headers: { 'Content-Type': 'application/json' },
+    ...options
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const err = new Error(body.error || `HTTP ${res.status}`);
+    err.status = res.status;
+    throw err;
+  }
+  return body;
+}
+
+document.getElementById('briefForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const platforms = Array.from(document.querySelectorAll('.checkboxes input:checked')).map((el) => el.value);
+
+  const payload = {
+    app: document.getElementById('app').value,
+    goal: document.getElementById('goal').value,
+    keyMessage: document.getElementById('keyMessage').value,
+    offer: document.getElementById('offer').value || undefined,
+    targetAudience: document.getElementById('targetAudience').value,
+    platforms,
+    language: document.getElementById('language').value
+  };
+
+  try {
+    const campaign = await callApi('/api/campaigns', { method: 'POST', body: JSON.stringify(payload) });
+    currentCampaign = campaign;
+    renderCampaign();
+  } catch (err) {
+    renderCampaign(err);
+  }
+});
+
+document.getElementById('loadBtn').addEventListener('click', async () => {
+  const id = document.getElementById('loadId').value.trim();
+  if (!id) return;
+  try {
+    currentCampaign = await callApi(`/api/campaigns/${id}`);
+    renderCampaign();
+  } catch (err) {
+    renderCampaign(err);
+  }
+});
+
+document.getElementById('listBtn').addEventListener('click', async () => {
+  const listEl = document.getElementById('listResult');
+  try {
+    const campaigns = await callApi('/api/campaigns');
+    if (campaigns.length === 0) {
+      listEl.innerHTML = '<p class="empty">Aucune campagne.</p>';
+      return;
+    }
+    listEl.innerHTML = campaigns
+      .map((c) => `<div style="margin-top:8px;">
+        <button class="secondary" style="width:100%; text-align:left;" data-id="${c.id}">
+          [${c.status}] ${c.app} - ${escapeHtml(c.goal).slice(0, 40)}
+        </button>
+      </div>`)
+      .join('');
+    listEl.querySelectorAll('button[data-id]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        try {
+          currentCampaign = await callApi(`/api/campaigns/${btn.dataset.id}`);
+          renderCampaign();
+        } catch (err) {
+          renderCampaign(err);
+        }
+      });
+    });
+  } catch (err) {
+    listEl.innerHTML = `<div class="error">${escapeHtml(err.message)}</div>`;
+  }
+});
+
+async function runAction(path, button) {
+  button.disabled = true;
+  try {
+    currentCampaign = await callApi(`/api/campaigns/${currentCampaign.id}${path}`, { method: 'POST', body: '{}' });
+    renderCampaign();
+  } catch (err) {
+    renderCampaign(err);
+  }
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function renderCopy(copy) {
+  if (!copy) return '';
+  const platformCards = Object.entries(copy.platforms || {})
+    .map(([platform, data]) => `
+      <div class="platform-card">
+        <h4>${escapeHtml(platform)}</h4>
+        ${(data.captions || []).map((c) => `<div class="caption">- ${escapeHtml(c)}</div>`).join('')}
+        <div class="hashtags">${(data.hashtags || []).map((h) => '#' + escapeHtml(h)).join(' ')}</div>
+      </div>
+    `)
+    .join('');
+
+  return `
+    <h4 style="margin-bottom:4px;">Flyer</h4>
+    <div><strong>${escapeHtml(copy.flyer?.headline || '')}</strong></div>
+    <div>${escapeHtml(copy.flyer?.subtext || '')}</div>
+    ${platformCards}
+  `;
+}
+
+function renderCampaign(error) {
+  const panel = document.getElementById('campaignPanel');
+
+  if (!currentCampaign) {
+    panel.innerHTML = '<p class="empty">Aucune campagne selectionnee. Creez-en une ou chargez un id existant.</p>';
+    return;
+  }
+
+  const c = currentCampaign;
+  const status = c.status;
+  const flyerImg = c.flyerUrl ? `<img class="flyer" src="${apiBase()}${c.flyerUrl}?t=${Date.now()}" alt="flyer" />` : '';
+  const videoScript = c.videoScript ? `<h4>Script video</h4><pre>${escapeHtml(c.videoScript)}</pre>` : '';
+  const errorHtml = error ? `<div class="error">${escapeHtml(error.message)}</div>` : '';
+  const publishNote = c.note ? `<p class="field-note">${escapeHtml(c.note)}</p>` : '';
+
+  panel.innerHTML = `
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <h3 style="margin:0;">Campagne</h3>
+      <span class="status-badge">${escapeHtml(status)}</span>
+    </div>
+    <p class="field-note">id: ${escapeHtml(c.id)}</p>
+
+    <div class="actions">
+      <button id="btnCopy" ${status !== 'draft' ? 'disabled' : ''}>Generer les textes</button>
+      <button id="btnVideo" ${!c.copy ? 'disabled' : ''}>Generer le script video</button>
+      <button id="btnDesign" ${!c.copy || (status !== 'copy_generated' && status !== 'design_generated') ? 'disabled' : ''}>Generer le flyer</button>
+      <button id="btnApprove" ${status !== 'design_generated' ? 'disabled' : ''}>Approuver</button>
+      <button id="btnPublish" ${status !== 'approved' ? 'disabled' : ''}>Publier</button>
+    </div>
+
+    ${errorHtml}
+    ${publishNote}
+    ${flyerImg}
+    ${renderCopy(c.copy)}
+    ${videoScript}
+
+    <h4>Reponse brute</h4>
+    <pre>${escapeHtml(JSON.stringify(c, null, 2))}</pre>
+  `;
+
+  document.getElementById('btnCopy').addEventListener('click', (e) => runAction('/copy', e.target));
+  document.getElementById('btnVideo').addEventListener('click', (e) => runAction('/video-script', e.target));
+  document.getElementById('btnDesign').addEventListener('click', (e) => runAction('/design', e.target));
+  document.getElementById('btnApprove').addEventListener('click', (e) => runAction('/approve', e.target));
+  document.getElementById('btnPublish').addEventListener('click', (e) => runAction('/publish', e.target));
+}
+</script>
+
+</body>
+</html>
