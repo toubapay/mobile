@@ -1,0 +1,22 @@
+{
+  "name": "marketing-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI marketing content generator (Claude copy + local flyer rendering) for Ocass and Intercity Travel campaigns",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "setup:assets": "node scripts/generate-placeholder-templates.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
